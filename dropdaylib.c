@@ -4,6 +4,7 @@
 #include "dropdaylib.h"
 
 char* string;
+FILE* file;
 
 char* randomLetters(int jigLength) {
     if(string != NULL) {
@@ -18,12 +19,43 @@ char* randomLetters(int jigLength) {
 
 void fixHouseNumberESP() {
     int profiles = 0, jigLength = 4;
+    unsigned short int choice = 0;
+    char fileName[200];
     printf(" Digit the numbers of ESP profiles: ");
     scanf("%d", &profiles);
     while (getchar()!='\n');    // Clean the buffer
-    for (int i = 0; i < profiles; i++) {
-        printf("22 BAI%s\n", randomLetters(jigLength));
-    }
+    printf(" Where would you like to save your jig:\n 1) Print on the CLI 2) Save on a .txt file 3) Modify your \"profiles.csv\" for you\n 4) Return to main menu'\n");
+    do {
+        printf(" Choose the mode or insert \"4\" to exit: ");
+        scanf("%hu", &choice);
+        while (getchar()!='\n');
+        switch(choice) {
+            case 1:
+                for(int i = 0; i < profiles; i++) {
+                    printf("22 BAI%s\n", randomLetters(jigLength));
+                }
+            break;
+            case 2:
+                printf(" Write your directory and file name to save the results\n or only file name (if you want the file on the same DIR of the script): ");
+                scanf("%s", fileName);
+                if((file = fopen(fileName,"w")) == NULL) {
+                    printf(" Error to create the file!\n");
+                }
+                else {
+                    for(int i = 0; i < profiles; i++) {
+                        fprintf(file,"%s%s\n","22 BAI",randomLetters(jigLength));
+                    }
+                    fclose(file);
+                    printf(" %d HouseNumbers saved on %s!\n", profiles, fileName);
+                }
+            break;
+            case 3: printf(" Work in progress...\n");
+            break;
+            case 4: printf(" Returning to main menu'...\n");
+            break;
+            default: printf(" The choice does not exist...\n");
+        }
+    } while(choice != 4);
 }
 
 void numberForAccountGen() {

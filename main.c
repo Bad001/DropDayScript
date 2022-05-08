@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <time.h>
 #include "dropdaylib.h"
+#include "ansiescapes.h"
 
 int main() {
   unsigned short int choice = 0;
+  setupConsole();
   srand(time(NULL));
   do {
     printMenu();
@@ -21,5 +23,6 @@ int main() {
       default: printf(" The choice does not exist...\n");
     }
   } while(choice != 3);
+  restoreConsole();
   return 0;
 }
